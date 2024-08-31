@@ -104,3 +104,14 @@ document.getElementById('undo').addEventListener('click', () => {
         ctx.putImageData(previousState, 0, 0);
     }
 });
+
+let isEraser = false;
+
+document.getElementById('eraser').addEventListener('click', () => {
+    isEraser = !isEraser;
+    if (isEraser) {
+        color = '#f5f5f5';  // Set color to match the background
+    } else {
+        color = colorEl.value;  // Revert to selected color
+    }
+});
