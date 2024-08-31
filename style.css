@@ -52,7 +52,7 @@ canvas {
     color: white;  /* White text color */
     border: none;
     border-radius: 2px;  /* Rounded corners */
-    font-size: 1rem;  /* Large font size */
+    font-size: 0.8rem;  /* Large font size */
     padding: 0.5rem 1rem;  /* Padding around the text */
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;  /* Smooth transition effects */
@@ -65,6 +65,28 @@ canvas {
   
   #undo:active {
     background-color: #a30000;  /* Even darker red when clicked */
+    transform: scale(0.95);  /* Slightly shrink the button on click */
+  }
+  
+  #eraser {
+    background-color:grey;  /* Light gray background */
+    color:white;  /* Dark gray text color */
+    border: 1px solid;
+    border-radius: 5px;  /* Rounded corners */
+    font-size: 0.8rem;  /* Large font size */
+    padding: 0.5rem 1rem;  /* Padding around the text */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;  /* Smooth transition effects */
+  }
+  
+  #eraser:hover {
+    background-color: #e0e0e0;  /* Slightly darker gray on hover */
+    color: red;
+    transform: scale(1.05);  /* Slightly enlarge the button */
+  }
+  
+  #eraser:active {
+    background-color: #d0d0d0;  /* Darker gray when clicked */
     transform: scale(0.95);  /* Slightly shrink the button on click */
   }
   
