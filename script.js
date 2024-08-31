@@ -122,3 +122,8 @@ document.getElementById('download').addEventListener('click', () => {
     link.href = canvas.toDataURL();
     link.click();
 });
+
+document.getElementById('background').addEventListener('input', (e) => {
+    const bgColor = e.target.value;
+    canvas.style.backgroundColor = bgColor;
+});

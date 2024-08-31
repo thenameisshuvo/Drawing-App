@@ -102,12 +102,13 @@ canvas {
   }
   
   #download:hover {
-    background-color: #45a049;  /* Slightly darker green on hover */
+    background-color: goldenrod;  /* Slightly darker green on hover */
     transform: scale(1.05);  /* Slightly enlarge the button */
   }
   
   #download:active {
-    background-color: #388e3c;  /* Darker green when clicked */
+    background-color: goldenrod;  /* Darker green when clicked */
     transform: scale(0.95);  /* Slightly shrink the button on click */
   }
+  
   
