@@ -115,3 +115,10 @@ document.getElementById('eraser').addEventListener('click', () => {
         color = colorEl.value;  // Revert to selected color
     }
 });
+
+document.getElementById('download').addEventListener('click', () => {
+    const link = document.createElement('a');
+    link.download = 'drawing.png';
+    link.href = canvas.toDataURL();
+    link.click();
+});

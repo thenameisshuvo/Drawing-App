@@ -90,3 +90,24 @@ canvas {
     transform: scale(0.95);  /* Slightly shrink the button on click */
   }
   
+  #download {
+    background-color:white;  /* Green background indicating a positive action */
+    color: white;  /* White text color */
+    border: none;
+    border-radius: 5px;  /* Rounded corners for a modern look */
+    font-size: 2rem;  /* Large font size */
+    padding: 0.5rem 1rem;  /* Padding around the text */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;  /* Smooth transition effects */
+  }
+  
+  #download:hover {
+    background-color: #45a049;  /* Slightly darker green on hover */
+    transform: scale(1.05);  /* Slightly enlarge the button */
+  }
+  
+  #download:active {
+    background-color: #388e3c;  /* Darker green when clicked */
+    transform: scale(0.95);  /* Slightly shrink the button on click */
+  }
+  
