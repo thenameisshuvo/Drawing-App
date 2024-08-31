@@ -51,8 +51,8 @@ canvas {
     background-color: #ff4d4d;  /* Red background */
     color: white;  /* White text color */
     border: none;
-    border-radius: 5px;  /* Rounded corners */
-    font-size: 1.5rem;  /* Large font size */
+    border-radius: 2px;  /* Rounded corners */
+    font-size: 1rem;  /* Large font size */
     padding: 0.5rem 1rem;  /* Padding around the text */
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;  /* Smooth transition effects */
