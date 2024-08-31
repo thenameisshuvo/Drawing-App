@@ -111,4 +111,20 @@ canvas {
     transform: scale(0.95);  /* Slightly shrink the button on click */
   }
   
+  /* Add a pulse animation to buttons on hover */
+@keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  button:hover {
+    animation: pulse 1s ease-in-out;
+  }
   
