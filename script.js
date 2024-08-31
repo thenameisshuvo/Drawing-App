@@ -84,3 +84,23 @@ decreaseBtn.addEventListener('click', () => {
 colorEl.addEventListener('change', (e) => color = e.target.value)
 
 clearEl.addEventListener('click', () => ctx.clearRect(0,0, canvas.width, canvas.height))
+
+let undoStack = [];
+
+canvas.addEventListener('mousedown', (e) => {
+    isPressed = true;
+    // Save the current canvas state to the undo stack
+    undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+    if (undoStack.length > 10) {
+        undoStack.shift();  // Limit undo history to 10 actions
+    }
+    x = e.offsetX;
+    y = e.offsetY;
+});
+
+document.getElementById('undo').addEventListener('click', () => {
+    if (undoStack.length > 0) {
+        let previousState = undoStack.pop();
+        ctx.putImageData(previousState, 0, 0);
+    }
+});
