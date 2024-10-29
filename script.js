@@ -127,3 +127,62 @@ document.getElementById('background').addEventListener('input', (e) => {
     const bgColor = e.target.value;
     canvas.style.backgroundColor = bgColor;
 });
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+// Variables for tracking the drawing state
+let isDrawing = false;
+let lastX = 0;
+let lastY = 0;
+let brushSize = 5; // Size of the brush
+let brushColor = '#000000'; // Color of the brush
+
+// Function to start drawing
+function startDrawing(x, y) {
+    isDrawing = true;
+    [lastX, lastY] = [x, y];
+}
+
+// Function to draw
+function draw(x, y) {
+    if (!isDrawing) return;
+
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = brushColor;
+    ctx.lineWidth = brushSize;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    [lastX, lastY] = [x, y];
+}
+
+// Function to stop drawing
+function stopDrawing() {
+    isDrawing = false;
+}
+
+
+// Event listeners for touch
+canvas.addEventListener('touchstart', (e) => {
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    startDrawing(touch.clientX - rect.left, touch.clientY - rect.top);
+});
+
+canvas.addEventListener('touchmove', (e) => {
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    draw(touch.clientX - rect.left, touch.clientY - rect.top);
+    e.preventDefault(); // Prevent scrolling while drawing
+});
+
+canvas.addEventListener('touchend', stopDrawing);
+canvas.addEventListener('touchcancel', stopDrawing);
+
+// Example function to change brush size and color
+function changeBrush(size, color) {
+    brushSize = size;
+    brushColor = color;
+}

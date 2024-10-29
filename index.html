@@ -18,7 +18,12 @@
       <button id="undo">Undo ↩</button>
       <button id="eraser">Eraser 🧹</button>
       <button id="download">📥</button>
+      <canvas id="canvas" width="800" height="600" style="border: 1px solid #000;"></canvas>
 
+      <!-- Add brush size and color controls -->
+      <input type="range" min="1" max="20" value="5" id="brushSize" onchange="changeBrush(this.value, brushColor)">
+      
+      
 
       <button id="clear">X</button>
     </div>
