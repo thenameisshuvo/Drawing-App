@@ -56,7 +56,7 @@ canvas.addEventListener('mouseout', () => (isDrawing = false));
 
 // Touch events for mobile
 canvas.addEventListener('touchstart', (e) => {
-    e.preventDefault();  // Prevent default touch behavior
+    e.preventDefault(); // Prevent scrolling and zooming
     const touch = e.touches[0];
     const rect = canvas.getBoundingClientRect();
     isDrawing = true;
@@ -70,7 +70,7 @@ canvas.addEventListener('touchmove', (e) => {
     const touch = e.touches[0];
     const rect = canvas.getBoundingClientRect();
     draw(touch.clientX - rect.left, touch.clientY - rect.top);
-    e.preventDefault();  // Prevent scrolling or zooming during drawing
+    e.preventDefault(); // Prevent page scroll or zoom while drawing
 });
 
 canvas.addEventListener('touchend', () => (isDrawing = false));
