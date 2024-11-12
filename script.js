@@ -1,188 +1,146 @@
+// Canvas and context setup
 const canvas = document.getElementById('canvas');
-const increaseBtn = document.getElementById('increase');
-const decreaseBtn = document.getElementById('decrease');
-const sizeEL = document.getElementById('size');
-const colorEl = document.getElementById('color');
-const clearEl = document.getElementById('clear');
-
 const ctx = canvas.getContext('2d');
 
-let size = 10
-let isPressed = false
-colorEl.value = 'black'
-let color = colorEl.value
-let x
-let y
+// Selectors for controls
+const decreaseBtn = document.getElementById('decrease');
+const increaseBtn = document.getElementById('increase');
+const sizeEl = document.getElementById('size');
+const colorEl = document.getElementById('color');
+const backgroundEl = document.getElementById('background');
+const undoBtn = document.getElementById('undo');
+const eraserBtn = document.getElementById('eraser');
+const pencilBtn = document.getElementById('pencil');
+const downloadBtn = document.getElementById('download');
+const clearBtn = document.getElementById('clear');
 
-canvas.addEventListener('mousedown', (e) => {
-    isPressed = true
-
-    x = e.offsetX
-    y = e.offsetY
-})
-
-document.addEventListener('mouseup', (e) => {
-    isPressed = false
-
-    x = undefined
-    y = undefined
-})
-
-canvas.addEventListener('mousemove', (e) => {
-    if(isPressed) {
-        const x2 = e.offsetX
-        const y2 = e.offsetY
-
-        drawCircle(x2, y2)
-        drawLine(x, y, x2, y2)
-
-        x = x2
-        y = y2
-    }
-})
-
-function drawCircle(x, y) {
-    ctx.beginPath();
-    ctx.arc(x, y, size, 0, Math.PI * 2)
-    ctx.fillStyle = color
-    ctx.fill()
-}
-
-function drawLine(x1, y1, x2, y2) {
-    ctx.beginPath()
-    ctx.moveTo(x1, y1)
-    ctx.lineTo(x2, y2)
-    ctx.strokeStyle = color
-    ctx.lineWidth = size * 2
-    ctx.stroke()
-}
-
-function updateSizeOnScreen() {
-    sizeEL.innerText = size
-}
-
-increaseBtn.addEventListener('click', () => {
-    size += 3
-
-    if(size > 50) {
-        size = 50
-    }
-
-    updateSizeOnScreen()
-})
-
-decreaseBtn.addEventListener('click', () => {
-    size -= 3
-
-    if(size < 5) {
-        size = 5
-    }
-
-    updateSizeOnScreen()
-})
-
-colorEl.addEventListener('change', (e) => color = e.target.value)
-
-clearEl.addEventListener('click', () => ctx.clearRect(0,0, canvas.width, canvas.height))
-
+// Drawing variables
+let size = 10;
+let color = colorEl.value;
+let isDrawing = false;
+let x, y;
 let undoStack = [];
+let isEraser = false;
+let isPencil = true;
 
-canvas.addEventListener('mousedown', (e) => {
-    isPressed = true;
-    // Save the current canvas state to the undo stack
+// Update the displayed brush size
+function updateSizeOnScreen() {
+    sizeEl.innerText = size;
+}
+
+// Save canvas state for undo functionality
+function saveState() {
     undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
-    if (undoStack.length > 10) {
-        undoStack.shift();  // Limit undo history to 10 actions
-    }
+    if (undoStack.length > 10) undoStack.shift(); // Limit to 10 states
+}
+
+// Start drawing
+canvas.addEventListener('mousedown', (e) => {
+    isDrawing = true;
     x = e.offsetX;
     y = e.offsetY;
+    saveState();
 });
 
-document.getElementById('undo').addEventListener('click', () => {
+canvas.addEventListener('mousemove', (e) => {
+    if (!isDrawing) return;
+    const x2 = e.offsetX;
+    const y2 = e.offsetY;
+    draw(x2, y2);
+    x = x2;
+    y = y2;
+});
+
+canvas.addEventListener('mouseup', () => (isDrawing = false));
+canvas.addEventListener('mouseout', () => (isDrawing = false));
+
+// Touch events for mobile
+canvas.addEventListener('touchstart', (e) => {
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    isDrawing = true;
+    x = touch.clientX - rect.left;
+    y = touch.clientY - rect.top;
+    saveState();
+});
+
+canvas.addEventListener('touchmove', (e) => {
+    if (!isDrawing) return;
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    draw(touch.clientX - rect.left, touch.clientY - rect.top);
+    e.preventDefault();
+});
+
+canvas.addEventListener('touchend', () => (isDrawing = false));
+canvas.addEventListener('touchcancel', () => (isDrawing = false));
+
+// Drawing function
+function draw(x2, y2) {
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x2, y2);
+    ctx.strokeStyle = isEraser ? getCurrentBackgroundColor() : color;
+    ctx.lineWidth = size;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+}
+
+// Increase and decrease brush size
+increaseBtn.addEventListener('click', () => {
+    size = Math.min(size + 2, 50); // Limit max size to 50
+    updateSizeOnScreen();
+});
+
+decreaseBtn.addEventListener('click', () => {
+    size = Math.max(size - 2, 5); // Limit min size to 5
+    updateSizeOnScreen();
+});
+
+// Change brush color
+colorEl.addEventListener('input', (e) => {
+    color = e.target.value;
+    isEraser = false; // Switch to brush if color is changed
+});
+
+// Change background color
+backgroundEl.addEventListener('input', (e) => {
+    canvas.style.backgroundColor = e.target.value;
+});
+
+// Get current background color (for eraser tool)
+function getCurrentBackgroundColor() {
+    return window.getComputedStyle(canvas).backgroundColor || '#ffffff'; // Default white if no color is set
+}
+
+// Undo functionality
+undoBtn.addEventListener('click', () => {
     if (undoStack.length > 0) {
-        let previousState = undoStack.pop();
+        const previousState = undoStack.pop();
         ctx.putImageData(previousState, 0, 0);
     }
 });
 
-let isEraser = false;
-
-document.getElementById('eraser').addEventListener('click', () => {
-    isEraser = !isEraser;
-    if (isEraser) {
-        color = '#f5f5f5';  // Set color to match the background
-    } else {
-        color = colorEl.value;  // Revert to selected color
-    }
+// Eraser functionality
+eraserBtn.addEventListener('click', () => {
+    isEraser = true;
+    isPencil = false;
 });
 
-document.getElementById('download').addEventListener('click', () => {
+// Pencil functionality
+pencilBtn.addEventListener('click', () => {
+    isEraser = false;
+    isPencil = true;
+    color = colorEl.value; // Revert to selected color
+});
+
+// Download canvas as image
+downloadBtn.addEventListener('click', () => {
     const link = document.createElement('a');
     link.download = 'drawing.png';
     link.href = canvas.toDataURL();
     link.click();
 });
 
-document.getElementById('background').addEventListener('input', (e) => {
-    const bgColor = e.target.value;
-    canvas.style.backgroundColor = bgColor;
-});
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-
-// Variables for tracking the drawing state
-let isDrawing = false;
-let lastX = 0;
-let lastY = 0;
-let brushSize = 5; // Size of the brush
-let brushColor = '#000000'; // Color of the brush
-
-// Function to start drawing
-function startDrawing(x, y) {
-    isDrawing = true;
-    [lastX, lastY] = [x, y];
-}
-
-// Function to draw
-function draw(x, y) {
-    if (!isDrawing) return;
-
-    ctx.beginPath();
-    ctx.moveTo(lastX, lastY);
-    ctx.lineTo(x, y);
-    ctx.strokeStyle = brushColor;
-    ctx.lineWidth = brushSize;
-    ctx.lineCap = 'round';
-    ctx.stroke();
-
-    [lastX, lastY] = [x, y];
-}
-
-// Function to stop drawing
-function stopDrawing() {
-    isDrawing = false;
-}
-
-
-// Event listeners for touch
-canvas.addEventListener('touchstart', (e) => {
-    const touch = e.touches[0];
-    const rect = canvas.getBoundingClientRect();
-    startDrawing(touch.clientX - rect.left, touch.clientY - rect.top);
-});
-
-canvas.addEventListener('touchmove', (e) => {
-    const touch = e.touches[0];
-    const rect = canvas.getBoundingClientRect();
-    draw(touch.clientX - rect.left, touch.clientY - rect.top);
-    e.preventDefault(); // Prevent scrolling while drawing
-});
-
-canvas.addEventListener('touchend', stopDrawing);
-canvas.addEventListener('touchcancel', stopDrawing);
-
-// Example function to change brush size and color
-function changeBrush(size, color) {
-    brushSize = size;
-    brushColor = color;
-}
+// Clear canvas
+clearBtn.addEventListener('click', () => ctx.clearRect(0, 0, canvas.width, canvas.height));
