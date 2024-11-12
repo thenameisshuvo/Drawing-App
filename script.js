@@ -56,6 +56,7 @@ canvas.addEventListener('mouseout', () => (isDrawing = false));
 
 // Touch events for mobile
 canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();  // Prevent default touch behavior
     const touch = e.touches[0];
     const rect = canvas.getBoundingClientRect();
     isDrawing = true;
@@ -69,7 +70,7 @@ canvas.addEventListener('touchmove', (e) => {
     const touch = e.touches[0];
     const rect = canvas.getBoundingClientRect();
     draw(touch.clientX - rect.left, touch.clientY - rect.top);
-    e.preventDefault();
+    e.preventDefault();  // Prevent scrolling or zooming during drawing
 });
 
 canvas.addEventListener('touchend', () => (isDrawing = false));
@@ -144,3 +145,9 @@ downloadBtn.addEventListener('click', () => {
 
 // Clear canvas
 clearBtn.addEventListener('click', () => ctx.clearRect(0, 0, canvas.width, canvas.height));
+
+// Resize canvas to fit mobile screens
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth * 0.9;  // 90% of the screen width
+    canvas.height = window.innerHeight * 0.6; // 60% of the screen height
+});
