@@ -3,258 +3,125 @@
 * {
   box-sizing: border-box;
 }
-
+/* General styling */
 body {
-  background-color: #f5f5f5;
-  font-family: 'Roboto', sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 100vh;
   margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  color: #333;
 }
 
 canvas {
-  border: 2px solid steelblue;
-}
-
-.toolbox {
-  background-color: steelblue;
-  border: 1px solid slateblue;
-  display: flex;
-  width: 804px;
-  padding: 1rem;
-}
-
-.toolbox > * {
+  border: 2px solid #333;
+  margin-top: 20px;
+  width: 90%;
+  max-width: 800px;
+  height: auto;
   background-color: #fff;
-  border: none;
-  display: inline-flex;
-  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Toolbox styling */
+.toolbox {
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  font-size: 2rem;
-  height: 50px;
-  width: 50px;
-  margin: 0.25rem;
-  padding: 0.25rem;
+  align-items: center;
+  margin-top: 15px;
+  gap: 10px;
+}
+
+.toolbox button, .toolbox input[type="color"] {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.toolbox button {
+  background-color: #007bff;
+  color: white;
+}
+
+.toolbox button:hover {
+  background-color: #0056b3;
+}
+
+.toolbox #increase, .toolbox #decrease {
+  font-size: 20px;
+  width: 40px;
+  background-color: #4CAF50;
+}
+
+.toolbox #increase:hover, .toolbox #decrease:hover {
+  background-color: #388e3c;
+}
+
+.toolbox input[type="color"] {
+  padding: 0;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
 }
 
-.toolbox > *:last-child {
-  margin-left: auto;
+/* Responsive brush size display */
+#size {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 0 10px;
+  color: #555;
 }
 
+/* Download and clear buttons */
+#download, #clear {
+  background-color: #FF5722;
+  color: white;
+}
 
+#download:hover, #clear:hover {
+  background-color: #E64A19;
+}
 
-#undo {
-    background-color: #ff4d4d;  /* Red background */
-    color: white;  /* White text color */
-    border: none;
-    border-radius: 2px;  /* Rounded corners */
-    font-size: 0.8rem;  /* Large font size */
-    padding: 0.5rem 1rem;  /* Padding around the text */
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;  /* Smooth transition effects */
-  }
-  
-  #undo:hover {
-    background-color: #cc0000;  /* Darker red on hover */
-    transform: scale(1.05);  /* Slightly enlarge the button */
-  }
-  
-  #undo:active {
-    background-color: #a30000;  /* Even darker red when clicked */
-    transform: scale(0.95);  /* Slightly shrink the button on click */
-  }
-  
-  #eraser {
-    background-color:grey;  /* Light gray background */
-    color:white;  /* Dark gray text color */
-    border: 1px solid;
-    border-radius: 5px;  /* Rounded corners */
-    font-size: 0.8rem;  /* Large font size */
-    padding: 0.5rem 1rem;  /* Padding around the text */
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;  /* Smooth transition effects */
-  }
-  
-  #eraser:hover {
-    background-color: #e0e0e0;  /* Slightly darker gray on hover */
-    color: red;
-    transform: scale(1.05);  /* Slightly enlarge the button */
-  }
-  
-  #eraser:active {
-    background-color: #d0d0d0;  /* Darker gray when clicked */
-    transform: scale(0.95);  /* Slightly shrink the button on click */
-  }
-  
-  #download {
-    background-color:white;  /* Green background indicating a positive action */
-    color: white;  /* White text color */
-    border: none;
-    border-radius: 5px;  /* Rounded corners for a modern look */
-    font-size: 2rem;  /* Large font size */
-    padding: 0.5rem 1rem;  /* Padding around the text */
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;  /* Smooth transition effects */
-  }
-  
-  #download:hover {
-    background-color: goldenrod;  /* Slightly darker green on hover */
-    transform: scale(1.05);  /* Slightly enlarge the button */
-  }
-  
-  #download:active {
-    background-color: goldenrod;  /* Darker green when clicked */
-    transform: scale(0.95);  /* Slightly shrink the button on click */
-  }
-  
-  /* Add a pulse animation to buttons on hover */
-@keyframes pulse {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.1);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
-  
-  button:hover {
-    animation: pulse 1s ease-in-out;
-  }
-  
-  canvas {
-    border: 2px solid steelblue;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for a 3D effect */
-  }
-  
-  button {
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Light shadow for depth */
-  }
-  
-  button:active {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Shadow reduction on click */
-  }
-  
-  /* Animated border for the canvas */
-@keyframes borderAnimation {
-    0% {
-      border-color: steelblue;
-    }
-    50% {
-      border-color: #00aaff; /* Change to a different color */
-    }
-    100% {
-      border-color: steelblue;
-    }
-  }
-  
-  canvas {
-    border: 2px solid steelblue;
-    animation: borderAnimation 3s infinite; /* Loop the animation */
-  }
-/* Custom scrollbar styles */
-::-webkit-scrollbar {
-    width: 12px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: #f5f5f5;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
-    /* Developer Credit Style */
+/* Developer credit styling */
 .developer-credit {
-    position: fixed;
-    bottom: 10px; /* Adjust the position from the bottom */
-    right: 10px;  /* Adjust the position from the right */
-    font-size: 0.875rem; /* Slightly smaller font size */
-    color: #555;  /* Dark gray color for the text */
-    background-color: #fff; /* White background for readability */
-    padding: 0.5rem 1rem; /* Padding around the text */
-    border-radius: 5px; /* Rounded corners */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-    font-family: 'Roboto', sans-serif; /* Use the same font as the rest of the page */
+  margin-top: 20px;
+  font-size: 14px;
+  color: #777;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+  .toolbox button, .toolbox input[type="color"] {
+      padding: 8px;
+      font-size: 14px;
   }
-  
-  /* Ensure the canvas and toolbox adapt to different screen sizes */
-canvas {
-    max-width: 100%;
-    height: auto; /* Maintain aspect ratio */
+
+  #size {
+      font-size: 16px;
   }
-  
-  /* Toolbox adjustment */
+
+  canvas {
+      width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
   .toolbox {
-    flex-wrap: wrap; /* Allow wrapping of toolbox items on smaller screens */
-    justify-content: center; /* Center toolbox items */
+      gap: 5px;
   }
-  
-  /* Toolbox items adjustments */
-  .toolbox > * {
-    font-size: 1.5rem; /* Slightly smaller font size on smaller screens */
-    height: 40px;
-    width: 40px;
+
+  .toolbox button, .toolbox input[type="color"] {
+      padding: 6px;
+      font-size: 12px;
   }
-  
-  /* Responsive layout for the developer credit */
-  .developer-credit {
-    font-size: 0.75rem; /* Smaller font size for smaller screens */
-    padding: 0.25rem 0.5rem; /* Adjust padding */
+
+  #size {
+      font-size: 14px;
   }
-  
-  @media (max-width: 768px) {
-    .toolbox {
-      width: 100%;
-      padding: 0.5rem;
-    }
-  
-    .toolbox > * {
-      font-size: 1.25rem;
-      height: 35px;
-      width: 35px;
-    }
-  
-    canvas {
-      width: 100%;
-      height: 60vh; /* Adjust height to be responsive */
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .toolbox {
-      flex-direction: column; /* Stack toolbox items vertically */
-      align-items: center; /* Center toolbox items */
-    }
-  
-    .toolbox > * {
-      font-size: 1rem;
-      height: 30px;
-      width: 30px;
-      margin: 0.5rem; /* Adjust margin for spacing */
-    }
-  
-    canvas {
-      width: 100%;
-      height: 50vh; /* Adjust height to fit mobile screens */
-    }
-  
-    .developer-credit {
-      font-size: 0.65rem; /* Even smaller font size for very small screens */
-      padding: 0.25rem;
-      bottom: 5px; /* Adjust position from the bottom */
-      right: 5px; /* Adjust position from the right */
-    }
-  }
-  
+}
